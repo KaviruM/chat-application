@@ -2,10 +2,8 @@ import { useEffect, useRef, useState } from "react"
 
 function App() {
   const socket = useRef(null)
-  // register
   const [user, setUser] = useState(null)
   const [name, setName] = useState("")
-  // messaging
   const [text, setText] = useState("")
   const [destination, setDestination] = useState("")
   const [list, setList] = useState([])
@@ -37,10 +35,13 @@ function App() {
     setText("")
   }
 
+
   useEffect(() => {
     if (socket.current) { return }
+
     socket.current = new WebSocket("ws://localhost:3001")
     socket.current.addEventListener("message", event => {
+
       const data = JSON.parse(event.data)
       if (data.type === "connect-done") {
         setUser({ name: data.name, id: data.id })
@@ -59,19 +60,11 @@ function App() {
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder="Enter your name"
-            style={{ padding: '10px', marginRight: '10px', fontSize: '16px' }}
             onKeyPress={e => e.key === 'Enter' && onConnect()}
           />
           <button 
             onClick={onConnect}
-            style={{ 
-              padding: '10px 20px', 
-              fontSize: '16px', 
-              backgroundColor: '#007bff', 
-              color: 'white', 
-              border: 'none',
-              cursor: 'pointer'
-            }}
+            style={{ marginLeft: '10px', padding: '8px 15px', backgroundColor: '#28a745', color: 'white', border: 'none', cursor: 'pointer' }}
           >
             Connect
           </button>
